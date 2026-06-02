@@ -9,6 +9,7 @@ namespace Unity.FPS.Roguelike
         public GameObject GrenadePrefab;
         public float Cooldown = 5f;
         public float ThrowForce = 15f;
+        public float GrenadeDamage = 50f;
         
         private float m_NextGrenadeTime;
         private PlayerInputHandler m_InputHandler;
@@ -22,7 +23,34 @@ namespace Unity.FPS.Roguelike
         {
             m_InputHandler = GetComponent<PlayerInputHandler>();
             m_PlayerCamera = GetComponentInChildren<Camera>();
+            
+            UpdateSettingsFromPerks();
             SetupEnergyUI();
+        }
+
+        void UpdateSettingsFromPerks()
+        {
+            CombatAbilityPerk perk = null;
+            var header = GameObject.Find("=======  perks modifiers =======");
+            if (header != null)
+            {
+                // Find specifically the Grenade Ability perk
+                foreach (Transform child in header.transform)
+                {
+                    if (child.name.Contains("Grenade"))
+                    {
+                        perk = child.GetComponent<CombatAbilityPerk>();
+                        break;
+                    }
+                }
+            }
+
+            if (perk != null)
+            {
+                Cooldown = perk.Cooldown;
+                ThrowForce = perk.Force;
+                GrenadeDamage = perk.Damage;
+            }
         }
 
         void SetupEnergyUI()
@@ -65,6 +93,7 @@ namespace Unity.FPS.Roguelike
         {
             if (m_InputHandler.GetGrenadeInputDown() && Time.time >= m_NextGrenadeTime)
             {
+                UpdateSettingsFromPerks(); // Refresh settings before throwing
                 ThrowGrenade();
                 m_NextGrenadeTime = Time.time + Cooldown;
             }
@@ -91,7 +120,11 @@ namespace Unity.FPS.Roguelike
 
             GameObject grenade = Instantiate(GrenadePrefab, m_PlayerCamera.transform.position + m_PlayerCamera.transform.forward, m_PlayerCamera.transform.rotation);
             PlayerGrenade pg = grenade.GetComponent<PlayerGrenade>();
-            if (pg) pg.Initialize(gameObject);
+            if (pg)
+            {
+                pg.Initialize(gameObject);
+                pg.Damage = GrenadeDamage; // Apply the damage from the perk
+            }
 
             Rigidbody rb = grenade.GetComponent<Rigidbody>();
             if (rb)
