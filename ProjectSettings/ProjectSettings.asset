@@ -888,11 +888,11 @@ PlayerSettings:
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
   enableDirectStorage: 0
-  cloudProjectId: 74cade1e-a4fb-4b55-b7b1-dadbf4cfaaa3
+  cloudProjectId: 639f8e8f-cc49-4af4-8528-6b2ff0245897
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: My project (3)
-  organizationId: u4hvq2j60mpr5leby
+  projectName: Rogulike Amogus
+  organizationId: evolhimar
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

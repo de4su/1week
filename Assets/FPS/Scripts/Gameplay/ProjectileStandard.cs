@@ -237,11 +237,15 @@ namespace Unity.FPS.Gameplay
                 if (damageable)
                 {
                     float finalDamage = Damage;
-                    if (m_ProjectileBase.Owner.CompareTag("Player") && PlayerStats.Instance != null)
+                    if (m_ProjectileBase.Owner != null &&
+                        m_ProjectileBase.Owner.CompareTag("Player") &&
+                        PlayerStats.Instance != null)
                     {
                         finalDamage *= PlayerStats.Instance.DamageMult;
                     }
-                    damageable.InflictDamage(finalDamage, false, m_ProjectileBase.Owner);
+
+                    GameObject _damageSource = m_ProjectileBase.Owner != null ? m_ProjectileBase.Owner : null;
+                    damageable.InflictDamage(finalDamage, false, _damageSource);
                 }
             }
 
