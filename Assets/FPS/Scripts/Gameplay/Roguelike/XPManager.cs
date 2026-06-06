@@ -48,16 +48,43 @@ namespace Unity.FPS.Roguelike
                 popup.transform.SetParent(canvasGo.transform, false);
                 var text = popup.AddComponent<TMPro.TextMeshProUGUI>();
                 text.text = "+" + amount + " XP";
-                text.fontSize = 32;
-                text.color = new Color(0, 0.8f, 1, 1);
+                text.fontSize = 12; // Smaller font
+                text.color = new Color(0, 0.8f, 1, 0.7f); // More transparent
                 text.alignment = TMPro.TextAlignmentOptions.Center;
                 
+                // Load Orbitron font for sci-fi feel
+#if UNITY_EDITOR
+                var font = UnityEditor.AssetDatabase.LoadAssetAtPath<TMPro.TMP_FontAsset>("Assets/ModAssets/Fonts/Orbitron-Regular SDF.asset");
+                if (font != null) text.font = font;
+#endif
+
                 RectTransform rt = popup.GetComponent<RectTransform>();
-                rt.anchoredPosition = new Vector2(Random.Range(-100, 100), Random.Range(-50, 50));
+                // Position it above the center to stay clear of main gameplay focus
+                rt.anchoredPosition = new Vector2(Random.Range(-50, 50), 120 + Random.Range(-20, 20));
                 
-                Object.Destroy(popup, 1f);
-                // Simple float up effect script or just let it sit
+                StartCoroutine(AnimateXPPopup(popup, text, rt));
             }
+        }
+
+        System.Collections.IEnumerator AnimateXPPopup(GameObject popup, TMPro.TextMeshProUGUI text, RectTransform rt)
+        {
+            float duration = 1f;
+            float elapsed = 0f;
+            Vector2 startPos = rt.anchoredPosition;
+            Vector2 endPos = startPos + new Vector2(0, 50f);
+            Color startColor = text.color;
+            Color endColor = new Color(startColor.r, startColor.g, startColor.b, 0f);
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / duration;
+                if (rt != null) rt.anchoredPosition = Vector2.Lerp(startPos, endPos, t);
+                if (text != null) text.color = Color.Lerp(startColor, endColor, t);
+                yield return null;
+            }
+
+            if (popup != null) Destroy(popup);
         }
 
         void LevelUp()

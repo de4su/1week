@@ -871,6 +871,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7762295951947048642, guid: 25a1b0efadb966e44889fce712c8ff8d,
+        type: 3}
+      propertyPath: XPValue
+      value: 500
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1793,6 +1798,7 @@ Transform:
   - {fileID: 1541406864}
   - {fileID: 2009866058}
   - {fileID: 992109659}
+  - {fileID: 1765606038}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &663592160
@@ -2024,6 +2030,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4767347722019625266, guid: e29d43f43cc5d82499dd9926e01847d3,
+        type: 3}
+      propertyPath: XPValue
+      value: 2003
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3001,6 +3012,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4767347722019625266, guid: e29d43f43cc5d82499dd9926e01847d3,
+        type: 3}
+      propertyPath: XPValue
+      value: 2003
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3469,6 +3485,23 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1027148984}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1040614770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9dd6de1170827394af40148048b0de5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: fps.Gameplay::Unity.FPS.Roguelike.UpgradeData
+  Title: Fire Dash
+  Description: 
+  Type: 6
+  Value: 0
+  Icon: {fileID: 0}
 --- !u!1001 &1040660661
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6098,6 +6131,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1734976570}
   m_CullTransparentMesh: 1
+--- !u!1 &1765606037
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1765606038}
+  - component: {fileID: 1765606039}
+  m_Layer: 0
+  m_Name: FiredashModifier
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1765606038
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765606037}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 643899979}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1765606039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1765606037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1f12e78aa43ef64b837e261c61d9889, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: fps.Gameplay::Unity.FPS.Roguelike.FiredashPerk
+  MaxEnergy: 100
+  DashCost: 30
+  RegenRate: 20
+  DashSpeed: 40
+  DashDuration: 0.3
+  DamageRadius: 2
+  DamageAmount: 250
 --- !u!1001 &1771139419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9517,10 +9601,31 @@ PrefabInstance:
       objectReference: {fileID: 642591153}
     - target: {fileID: 2597541352642959477, guid: 761cdc9e4e883334cbdcea062d0befa7,
         type: 3}
+      propertyPath: CurrentMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2597541352642959477, guid: 761cdc9e4e883334cbdcea062d0befa7,
+        type: 3}
       propertyPath: TankShieldSpecial
       value: 
       objectReference: {fileID: 11400000, guid: 3a50c165d4617b858b343e58271080aa,
         type: 2}
+    - target: {fileID: 2597541352642959477, guid: 761cdc9e4e883334cbdcea062d0befa7,
+        type: 3}
+      propertyPath: AgileFiredashSpecial
+      value: 
+      objectReference: {fileID: 11400000, guid: cfc190177a9df5c4f810efdedf33a862,
+        type: 2}
+    - target: {fileID: 2597541352642959477, guid: 761cdc9e4e883334cbdcea062d0befa7,
+        type: 3}
+      propertyPath: ActiveUpgrades.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2597541352642959477, guid: 761cdc9e4e883334cbdcea062d0befa7,
+        type: 3}
+      propertyPath: 'ActiveUpgrades.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1040614770}
     - target: {fileID: 3122855503829242450, guid: 761cdc9e4e883334cbdcea062d0befa7,
         type: 3}
       propertyPath: m_StepOffset
@@ -11527,6 +11632,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4160549848294572208, guid: c996b53e9f849234393d1e90f68d1679,
+        type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: 38baad16d37681448ad7f672176ef2a0, type: 3}
     - target: {fileID: 6277484531393056600, guid: c996b53e9f849234393d1e90f68d1679,
         type: 3}
       propertyPath: m_textInfo.lineCount

@@ -198,6 +198,16 @@ namespace Unity.FPS.Gameplay
             return false;
         }
 
+        public bool GetSprintInputDown()
+        {
+            if (CanProcessInput())
+            {
+                return m_SprintAction.WasPressedThisFrame();
+            }
+
+            return false;
+        }
+
         public bool GetCrouchInputDown()
         {
             if (CanProcessInput())

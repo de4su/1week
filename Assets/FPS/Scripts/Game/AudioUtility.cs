@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.Audio;
 
 namespace Unity.FPS.Game
@@ -72,6 +72,52 @@ namespace Unity.FPS.Game
 
             s_AudioManager.GetFloat("MasterVolume", out var valueInDb);
             return Mathf.Pow(10f, valueInDb / 20.0f);
+        }
+
+        public static void SetMusicVolume(float value)
+        {
+            if (s_AudioManager == null)
+                s_AudioManager = Object.FindAnyObjectByType<AudioManager>();
+
+            if (value <= 0)
+                value = 0.001f;
+            float valueInDb = Mathf.Log10(value) * 20;
+
+            s_AudioManager.SetFloat("MusicVolume", valueInDb);
+        }
+
+        public static float GetMusicVolume()
+        {
+            if (s_AudioManager == null)
+                s_AudioManager = Object.FindAnyObjectByType<AudioManager>();
+
+            if (s_AudioManager.GetFloat("MusicVolume", out var valueInDb))
+                return Mathf.Pow(10f, valueInDb / 20.0f);
+
+            return 1f;
+        }
+
+        public static void SetSFXVolume(float value)
+        {
+            if (s_AudioManager == null)
+                s_AudioManager = Object.FindAnyObjectByType<AudioManager>();
+
+            if (value <= 0)
+                value = 0.001f;
+            float valueInDb = Mathf.Log10(value) * 20;
+
+            s_AudioManager.SetFloat("SFXVolume", valueInDb);
+        }
+
+        public static float GetSFXVolume()
+        {
+            if (s_AudioManager == null)
+                s_AudioManager = Object.FindAnyObjectByType<AudioManager>();
+
+            if (s_AudioManager.GetFloat("SFXVolume", out var valueInDb))
+                return Mathf.Pow(10f, valueInDb / 20.0f);
+
+            return 1f;
         }
     }
 }

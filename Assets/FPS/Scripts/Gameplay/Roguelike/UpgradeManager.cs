@@ -24,6 +24,7 @@ public enum PlayerMode { None, Tank, Agile }
         public UpgradeData TankShieldSpecial; // level 3
         public UpgradeData AgileHookSpecial; // level 3
         public UpgradeData GrenadeSpecial; // level 10
+        public UpgradeData AgileFiredashSpecial; // level 10 agile
         public UpgradeData TankSpecial; // level 7
         public UpgradeData AgileSpecial;
         public UpgradeData DualWieldSpecial; // level 5, Tank only
@@ -59,7 +60,9 @@ public enum PlayerMode { None, Tank, Agile }
                     if (prefab == null) 
                     {
                         // Fallback: look in standard paths
+#if UNITY_EDITOR
                         prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/FPS/Prefabs/UI/RoguelikeCanvas.prefab");
+#endif
                     }
 
                     if (prefab != null)
@@ -142,9 +145,18 @@ public enum PlayerMode { None, Tank, Agile }
             }
             else if (level == 10)
             {
-                if (GrenadeSpecial != null)
+                List<UpgradeData> special = new List<UpgradeData>();
+                if (CurrentMode == PlayerMode.Tank && GrenadeSpecial != null)
                 {
-                    List<UpgradeData> special = new List<UpgradeData> { GrenadeSpecial };
+                    special.Add(GrenadeSpecial);
+                }
+                else if (CurrentMode == PlayerMode.Agile && AgileFiredashSpecial != null)
+                {
+                    special.Add(AgileFiredashSpecial);
+                }
+
+                if (special.Count > 0)
+                {
                     UpgradeUI.ShowOptions(special);
                 }
                 else
@@ -152,7 +164,7 @@ public enum PlayerMode { None, Tank, Agile }
                     ShowGenericPool();
                 }
             }
-            else
+else
             {
                 ShowGenericPool();
             }
@@ -291,9 +303,19 @@ else
                     ga.GrenadePrefab = Resources.Load<GameObject>("Roguelike_Grenade");
                     if (ga.GrenadePrefab == null)
                     {
+#if UNITY_EDITOR
                         ga.GrenadePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/FPS/Prefabs/Roguelike_Grenade.prefab");
+#endif
                     }
-                    Debug.Log("[Roguelike] Special: Grenade Ability Unlocked!");
+Debug.Log("[Roguelike] Special: Grenade Ability Unlocked!");
+                }
+            }
+            else if (upgrade.Title.Contains("Dash") || upgrade.Title.Contains("Fire"))
+            {
+                if (player.GetComponent<AgileFiredash>() == null)
+                {
+                    player.AddComponent<AgileFiredash>();
+                    Debug.Log("[Roguelike] Agile Special: Fire Dash Unlocked!");
                 }
             }
             else if (upgrade.Title.Contains("DualWield"))
