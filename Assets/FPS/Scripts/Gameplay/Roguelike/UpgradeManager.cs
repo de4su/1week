@@ -204,7 +204,7 @@ else
             if (upgrade.Type == UpgradeType.SpecialAbility)
             {
                 // If we are at Level 1 or selecting a mode upgrade, set the mode
-                if (CurrentMode == PlayerMode.None || upgrade.Title.Contains("Mode"))
+                if ((CurrentMode == PlayerMode.None || upgrade.Title.Contains("Mode")) && !upgrade.Title.Contains("Ghost"))
                 {
                     if (upgrade.Title.Contains("Tank"))
                     {

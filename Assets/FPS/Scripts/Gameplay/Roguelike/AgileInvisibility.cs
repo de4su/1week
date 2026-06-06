@@ -99,7 +99,7 @@ namespace Unity.FPS.Roguelike
             if (IsInvisible)
             {
                 Energy -= DrainRate * Time.deltaTime;
-                Debug.Log("[Roguelike] Invisible. Energy: " + Energy + " Delta: " + Time.deltaTime);
+                // Debug.Log("[Roguelike] Invisible. Energy: " + Energy + " Delta: " + Time.deltaTime);
                 if (Energy <= 0)
 {
                     Energy = 0;
