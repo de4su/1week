@@ -32,6 +32,7 @@ namespace Unity.FPS.Roguelike
             m_InputHandler = GetComponent<PlayerInputHandler>();
             m_CameraTransform = GetComponentInChildren<Camera>().transform;
             
+            UpdateSettingsFromPerks();
             SetupShieldVisual();
             SetupEnergyUI();
         }
@@ -104,8 +105,35 @@ namespace Unity.FPS.Roguelike
             m_EnergyBarGo.SetActive(false);
         }
 
+        void UpdateSettingsFromPerks()
+        {
+            EnergyAbilityPerk perk = null;
+            var header = GameObject.Find("=======  perks modifiers =======");
+            if (header != null)
+            {
+                foreach (Transform child in header.transform)
+                {
+                    if (child.name.Contains("Shield"))
+                    {
+                        perk = child.GetComponent<EnergyAbilityPerk>();
+                        break;
+                    }
+                }
+            }
+
+            if (perk != null)
+            {
+                MaxEnergy = perk.MaxEnergy;
+                DrainRate = perk.DrainRate;
+                RegenRate = perk.RegenRate;
+                // If current energy is higher than new max, cap it
+                Energy = Mathf.Min(Energy, MaxEnergy);
+            }
+        }
+
         void Update()
         {
+            UpdateSettingsFromPerks();
             bool inputPressed = Keyboard.current != null && Keyboard.current.eKey.isPressed;
             bool wantsShield = inputPressed && Energy > 5f;
 

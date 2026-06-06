@@ -527,6 +527,7 @@ MonoBehaviour:
   FpsWeaponLayer:
     serializedVersion: 2
     m_Bits: 1024
+  ForceNoAim: 0
 --- !u!114 &783424908873546082
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -857,11 +858,14 @@ MonoBehaviour:
   ModeSelectionUpgrades:
   - {fileID: 11400000, guid: d44d4d0379bffe87789720647f70bd99, type: 2}
   - {fileID: 11400000, guid: b2df03c27b6e6904490e45ce6a7bd354, type: 2}
+  ActiveUpgrades: []
   TankShieldSpecial: {fileID: 11400000, guid: 3a50c165d4617b858b343e58271080aa, type: 2}
   AgileHookSpecial: {fileID: 11400000, guid: ee7ff54a6ebc20d8082ad8ec971a5c75, type: 2}
   GrenadeSpecial: {fileID: 11400000, guid: 8e867fe2161ab41f5a4ed3accc68ed85, type: 2}
+  AgileFiredashSpecial: {fileID: 0}
   TankSpecial: {fileID: 11400000, guid: 064d29b7288b76e2fbf8853700d75641, type: 2}
   AgileSpecial: {fileID: 11400000, guid: 052d5e9ebdd3fa63492f49a54961cbcb, type: 2}
+  DualWieldSpecial: {fileID: 11400000, guid: e7b3866a311c399418db0e164f4ce757, type: 2}
   UpgradeUI: {fileID: 0}
 --- !u!1 &7383874627095517793
 GameObject:

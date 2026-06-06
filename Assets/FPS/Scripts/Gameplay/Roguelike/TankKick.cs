@@ -19,13 +19,40 @@ namespace Unity.FPS.Roguelike
         {
             Debug.Log("[Roguelike] TankKick component started on " + gameObject.name);
             m_CameraTransform = GetComponentInChildren<Camera>().transform;
+            UpdateSettingsFromPerks();
             BuildFootVisual();
+        }
+
+        void UpdateSettingsFromPerks()
+        {
+            CombatAbilityPerk perk = null;
+            var header = GameObject.Find("=======  perks modifiers =======");
+            if (header != null)
+            {
+                foreach (Transform child in header.transform)
+                {
+                    if (child.name.Contains("Kick"))
+                    {
+                        perk = child.GetComponent<CombatAbilityPerk>();
+                        break;
+                    }
+                }
+            }
+
+            if (perk != null)
+            {
+                KickDamage = perk.Damage;
+                Cooldown = perk.Cooldown;
+                KickForce = perk.Force;
+                KickRange = perk.Range;
+            }
         }
 
         void Update()
         {
             if (Keyboard.current.qKey.wasPressedThisFrame)
             {
+                UpdateSettingsFromPerks();
                 Debug.Log("[Roguelike] Q pressed for TankKick. Cooldown left: " + Mathf.Max(0, (m_LastKickTime + Cooldown) - Time.time));
                 if (Time.time > m_LastKickTime + Cooldown)
                 {

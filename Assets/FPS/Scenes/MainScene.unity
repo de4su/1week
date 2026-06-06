@@ -9602,8 +9602,14 @@ PrefabInstance:
     - target: {fileID: 2597541352642959477, guid: 761cdc9e4e883334cbdcea062d0befa7,
         type: 3}
       propertyPath: CurrentMode
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2597541352642959477, guid: 761cdc9e4e883334cbdcea062d0befa7,
+        type: 3}
+      propertyPath: DualWieldSpecial
+      value: 
+      objectReference: {fileID: 11400000, guid: e7b3866a311c399418db0e164f4ce757,
+        type: 2}
     - target: {fileID: 2597541352642959477, guid: 761cdc9e4e883334cbdcea062d0befa7,
         type: 3}
       propertyPath: TankShieldSpecial

@@ -203,35 +203,75 @@ else
 
             if (upgrade.Type == UpgradeType.SpecialAbility)
             {
-                // If we are at Level 1 (Mode is None), we use titles to set the mode
-                if (CurrentMode == PlayerMode.None)
+                // If we are at Level 1 or selecting a mode upgrade, set the mode
+                if (CurrentMode == PlayerMode.None || upgrade.Title.Contains("Mode"))
                 {
                     if (upgrade.Title.Contains("Tank"))
                     {
                         CurrentMode = PlayerMode.Tank;
                         Debug.Log("[Roguelike] Switched to TANK Mode: Slow & Durable");
+                        
+                        float speedVal = -0.3f;
+                        float healthVal = 0.5f;
+
+                        var header = GameObject.Find("=======  perks modifiers =======");
+                        if (header != null)
+                        {
+                            foreach (Transform child in header.transform)
+                            {
+                                if (child.name.Contains("Tank"))
+                                {
+                                    var speedMod = child.GetComponent<SpeedModifier>();
+                                    var healthMod = child.GetComponent<HealthModifier>();
+                                    if (speedMod) speedVal = speedMod.SpeedMultiplier - 1f;
+                                    if (healthMod) healthVal = healthMod.HealthMultiplier - 1f;
+                                    break;
+                                }
+                            }
+                        }
+
                         UpgradeData tankSpeed = ScriptableObject.CreateInstance<UpgradeData>();
                         tankSpeed.Type = UpgradeType.PlayerSpeed;
-                        tankSpeed.Value = -0.3f;
+                        tankSpeed.Value = speedVal;
                         PlayerStats.Instance.ApplyUpgrade(tankSpeed);
 
                         UpgradeData tankHealth = ScriptableObject.CreateInstance<UpgradeData>();
                         tankHealth.Type = UpgradeType.MaxHealth;
-                        tankHealth.Value = 0.5f;
+                        tankHealth.Value = healthVal;
                         PlayerStats.Instance.ApplyUpgrade(tankHealth);
                     }
                     else if (upgrade.Title.Contains("Agile"))
                     {
                         CurrentMode = PlayerMode.Agile;
                         Debug.Log("[Roguelike] Switched to AGILE Mode: Fast & Nimble");
+                        
+                        float speedVal = 0.25f;
+                        float jumpVal = 0.2f;
+
+                        var header = GameObject.Find("=======  perks modifiers =======");
+                        if (header != null)
+                        {
+                            foreach (Transform child in header.transform)
+                            {
+                                if (child.name.Contains("Agile"))
+                                {
+                                    var speedMod = child.GetComponent<SpeedModifier>();
+                                    var jumpMod = child.GetComponent<JumpModifier>();
+                                    if (speedMod) speedVal = speedMod.SpeedMultiplier - 1f;
+                                    if (jumpMod) jumpVal = jumpMod.JumpMultiplier - 1f;
+                                    break;
+                                }
+                            }
+                        }
+
                         UpgradeData agileSpeed = ScriptableObject.CreateInstance<UpgradeData>();
                         agileSpeed.Type = UpgradeType.PlayerSpeed;
-                        agileSpeed.Value = 0.25f;
+                        agileSpeed.Value = speedVal;
                         PlayerStats.Instance.ApplyUpgrade(agileSpeed);
 
                         UpgradeData agileJump = ScriptableObject.CreateInstance<UpgradeData>();
                         agileJump.Type = UpgradeType.JumpHeight;
-                        agileJump.Value = 0.2f;
+                        agileJump.Value = jumpVal;
                         PlayerStats.Instance.ApplyUpgrade(agileJump);
                     }
                 }
@@ -318,7 +358,7 @@ Debug.Log("[Roguelike] Special: Grenade Ability Unlocked!");
                     Debug.Log("[Roguelike] Agile Special: Fire Dash Unlocked!");
                 }
             }
-            else if (upgrade.Title.Contains("DualWield"))
+            else if (upgrade.Title.Replace(" ", "").Contains("DualWield"))
             {
                 if (player.GetComponent<DualWield>() == null)
                 {
