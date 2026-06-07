@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Unity.FPS.Game
@@ -41,7 +41,6 @@ namespace Unity.FPS.Game
 
         void Start()
         {
-            AudioUtility.SetMasterVolume(1);
         }
 
         void Update()

@@ -58,9 +58,7 @@ namespace Unity.FPS.Game
             if (s_AudioManager == null)
                 s_AudioManager = Object.FindAnyObjectByType<AudioManager>();
 
-            if (value <= 0)
-                value = 0.001f;
-            float valueInDb = Mathf.Log10(value) * 20;
+            float valueInDb = value > 0.0001f ? Mathf.Log10(value) * 20 : -80f;
 
             s_AudioManager.SetFloat("MasterVolume", valueInDb);
         }
@@ -79,9 +77,7 @@ namespace Unity.FPS.Game
             if (s_AudioManager == null)
                 s_AudioManager = Object.FindAnyObjectByType<AudioManager>();
 
-            if (value <= 0)
-                value = 0.001f;
-            float valueInDb = Mathf.Log10(value) * 20;
+            float valueInDb = value > 0.0001f ? Mathf.Log10(value) * 20 : -80f;
 
             s_AudioManager.SetFloat("MusicVolume", valueInDb);
         }
@@ -102,9 +98,7 @@ namespace Unity.FPS.Game
             if (s_AudioManager == null)
                 s_AudioManager = Object.FindAnyObjectByType<AudioManager>();
 
-            if (value <= 0)
-                value = 0.001f;
-            float valueInDb = Mathf.Log10(value) * 20;
+            float valueInDb = value > 0.0001f ? Mathf.Log10(value) * 20 : -80f;
 
             s_AudioManager.SetFloat("SFXVolume", valueInDb);
         }
