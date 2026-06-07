@@ -5,7 +5,7 @@ using System.Collections;
 using Unity.FPS.Gameplay;
 using UnityEngine.InputSystem;
 using System.Linq;
-
+using DG.Tweening;
 
 public class ButtonsMiniGameManager : MonoBehaviour
 {
@@ -14,6 +14,11 @@ public class ButtonsMiniGameManager : MonoBehaviour
     [SerializeField] private float flashDuration = 1.0f;
     [SerializeField] private float delayBetweenButtons = 0.2f;
     [SerializeField] private float minigameStartDelay = 1.0f;
+
+    [SerializeField] private Sprite greenSprite;
+    [SerializeField] private Sprite blueSprite;
+    [SerializeField] private Sprite redSprite;
+    [SerializeField] private Sprite defaultSprite;
 
     private List<int> buttonSequence;
     private List<int> playerSequence = new List<int>();
@@ -107,11 +112,11 @@ public class ButtonsMiniGameManager : MonoBehaviour
         // Check if the player messed up immediately on this specific step
         if (playerSequence[playerSequence.Count - 1] != buttonSequence[playerSequence.Count - 1])
         {
-            StartCoroutine(FlashButton(buttonIndex, Color.red, 0.25f));
+            StartCoroutine(FlashButton(buttonIndex, Color.red, flashDuration));
             MiniGameFailed();
             return;
         }
-        else StartCoroutine(FlashButton(buttonIndex, Color.blue, 0.25f));
+        else StartCoroutine(FlashButton(buttonIndex, Color.blue, flashDuration));
 
         // If player successfully tracked the sequence up to the current total length
         if (playerSequence.Count == buttonSequence.Count)
@@ -172,16 +177,49 @@ public class ButtonsMiniGameManager : MonoBehaviour
     {
         Button _currentButton = buttons[buttonIndex];
         Image _buttonImage = _currentButton.GetComponent<Image>();
-        Color _originalColor = _buttonImage.color;
+        Transform _buttonTransform = _currentButton.transform;
+        
+        Vector3 _originalScale = _buttonTransform.localScale;
 
-        // Change to a feedback color (e.g., Cyan, Yellow, or Blue) 
-        // so it looks distinct from the game's green demonstration
-        _buttonImage.color = flashColor; 
+        // 1. Figure out which sprite to use based on the color passed in
+        Sprite targetSprite = defaultSprite; // Fallback default
 
-        // Quick flash duration
-        yield return new WaitForSeconds(duration);
+        switch (flashColor)
+        {
+            case Color c when c == Color.green:
+                targetSprite = greenSprite;
+                break;
+            case Color c when c == Color.red:
+                targetSprite = redSprite;
+                break;
+            case Color c when c == Color.blue:
+                targetSprite = blueSprite;
+                break;
+            default:
+                // If it's a weird custom color, just default to green or keep the current one
+                targetSprite = greenSprite; 
+                break;
+        }
 
-        // Revert back to original color
-        _buttonImage.color = _originalColor;
+        // Safety reset for the scale tween
+        _buttonTransform.DOKill();
+
+        float pushTime = duration * 0.25f;
+        float releaseTime = duration * 0.75f;
+
+        // 2. THE CLICK DOWN & SPRITE SWAP
+        _buttonImage.sprite = targetSprite; 
+        _buttonTransform.DOScale(_originalScale * 0.85f, pushTime).SetEase(Ease.OutQuad);
+
+        yield return new WaitForSeconds(pushTime);
+
+        // 3. THE RECOVERY BOUNCE (Starts expanding back up, but KEEPS the colored sprite)
+        _buttonTransform.DOScale(_originalScale, releaseTime).SetEase(Ease.OutBack);
+
+        // Wait for the expansion animation to completely finish playing...
+        yield return new WaitForSeconds(releaseTime);
+
+        // 4. RESET TO DEFAULT (Now that the movement is done, swap back to normal)
+        _buttonImage.sprite = defaultSprite;
     }
 }
