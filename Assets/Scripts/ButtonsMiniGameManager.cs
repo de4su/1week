@@ -11,7 +11,7 @@ public class ButtonsMiniGameManager : MonoBehaviour
 {
     [SerializeField] private Button[] buttons;
     [SerializeField] private int sequenceSize = 5;
-    [SerializeField] private float flashDuration = 1.0f;
+    [SerializeField] private float flashDuration = 0.7f;
     [SerializeField] private float delayBetweenButtons = 0.2f;
     [SerializeField] private float minigameStartDelay = 1.0f;
 
@@ -19,8 +19,10 @@ public class ButtonsMiniGameManager : MonoBehaviour
     [SerializeField] private Sprite blueSprite;
     [SerializeField] private Sprite redSprite;
     [SerializeField] private Sprite defaultSprite;
+    [SerializeField] private AudioSource buttonAudioSource;
 
     private List<int> buttonSequence;
+    [SerializeField] private GameObject roguelikeCanvasObject;
     private List<int> playerSequence = new List<int>();
     private bool isPlayerTurn = false;
 
@@ -64,6 +66,12 @@ public class ButtonsMiniGameManager : MonoBehaviour
 
     void StartMinigameRun()
     {
+        // --- FIND AND DISABLE ROGUELIKE CANVAS ---
+        if (roguelikeCanvasObject != null)
+        {
+            roguelikeCanvasObject.SetActive(false); // Turn it off!
+        }
+
         // Find the player input handler (adjust how you reference it if needed)
         PlayerInputHandler playerInput = FindAnyObjectByType<PlayerInputHandler>();
 
@@ -158,12 +166,17 @@ public class ButtonsMiniGameManager : MonoBehaviour
         isPlayerTurn = false;
         // Handle success state (e.g., unlock door, give ammo, close HUD panel)
 
+        // --- TURN ROGUELIKE CANVAS BACK ON ---
+        if (roguelikeCanvasObject != null)
+        {
+            roguelikeCanvasObject.SetActive(true);
+        }
+
         // Lock the cursor back to the center and hide it for FPS gameplay
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         PlayerInputHandler playerInput = FindAnyObjectByType<PlayerInputHandler>();
-    
         if (playerInput != null)
         {
             playerInput.SetMinigameMode(false); // Locks mouse, re-enables guns
@@ -207,6 +220,16 @@ public class ButtonsMiniGameManager : MonoBehaviour
         float pushTime = duration * 0.25f;
         float releaseTime = duration * 0.75f;
 
+        // 🔊 PLAY THE AUDIO HERE 
+        // It triggers immediately as the button shrinks to sound responsive
+        if (buttonAudioSource != null)
+        {
+            // PRO-TIP: If you want a slight pitch variation so spamming the button 
+            // doesn't sound robotic and annoying, uncomment the lines below:
+            buttonAudioSource.pitch = Random.Range(0.80f, 1.20f);
+            buttonAudioSource.Play();
+        }
+
         // 2. THE CLICK DOWN & SPRITE SWAP
         _buttonImage.sprite = targetSprite; 
         _buttonTransform.DOScale(_originalScale * 0.85f, pushTime).SetEase(Ease.OutQuad);
@@ -221,5 +244,14 @@ public class ButtonsMiniGameManager : MonoBehaviour
 
         // 4. RESET TO DEFAULT (Now that the movement is done, swap back to normal)
         _buttonImage.sprite = defaultSprite;
+    }
+
+    void OnDestroy()
+    {
+        // This stops the coroutine from trying to run after the object is dead
+        StopAllCoroutines();
+        
+        // This safely kills any active DOTween animations running on this script
+        DOTween.KillAll(); 
     }
 }
