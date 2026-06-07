@@ -82,7 +82,10 @@ namespace Unity.FPS.UI
             // Lock cursor when clicking outside of menu
             bool isUpgradeUIActive = UpgradeManager.Instance != null && UpgradeManager.Instance.UpgradeUI != null && UpgradeManager.Instance.UpgradeUI.UIContainer.activeSelf;
 
-            if (!MenuRoot.activeSelf && !isUpgradeUIActive && Mouse.current.leftButton.wasPressedThisFrame)
+            if (!MenuRoot.activeSelf && 
+                !isUpgradeUIActive && 
+                Mouse.current.leftButton.wasPressedThisFrame &&
+                !FindAnyObjectByType<PlayerInputHandler>().IsInMinigame)
 {
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;

@@ -26,6 +26,7 @@ namespace Unity.FPS.Gameplay
         bool m_FireInputWasHeld;
 
         public bool FireInputBlocked { get; set; }
+        public bool IsInMinigame { get; set; } = false;
 
         private InputAction m_MoveAction;
         private InputAction m_LookAction;
@@ -79,6 +80,9 @@ namespace Unity.FPS.Gameplay
 
         public bool CanProcessInput()
         {
+            // If we are in a minigame, STOP processing normal player movement/shooting inputs
+            if (IsInMinigame) return false;
+
             return Cursor.lockState == CursorLockMode.Locked && !m_GameFlowManager.GameIsEnding;
         }
 
@@ -136,6 +140,34 @@ namespace Unity.FPS.Gameplay
 #endif
 
             return input;
+        }
+
+        public void SetMinigameMode(bool active)
+        {
+            IsInMinigame = active;
+
+            if (active)
+            {
+                // Free the mouse and make it visible for the UI
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
+                // Optional: Disable specific actions entirely so they can't misfire
+                m_FireAction.Disable();
+                m_MoveAction.Disable();
+                m_LookAction.Disable();
+            }
+            else
+            {
+                // Re-lock the mouse for FPS gameplay
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+
+                // Re-enable actions
+                m_FireAction.Enable();
+                m_MoveAction.Enable();
+                m_LookAction.Enable();
+            }
         }
 
         public bool GetJumpInputDown()
