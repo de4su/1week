@@ -20,15 +20,21 @@ public class ButtonsMiniGameManager : MonoBehaviour
     [SerializeField] private Sprite redSprite;
     [SerializeField] private Sprite defaultSprite;
     [SerializeField] private AudioSource buttonAudioSource;
+    [SerializeField] private GameObject roguelikeCanvasObject;
 
     private List<int> buttonSequence;
-    [SerializeField] private GameObject roguelikeCanvasObject;
     private List<int> playerSequence = new List<int>();
     private bool isPlayerTurn = false;
+    private MinigameActivateButton currentActivatingButton;
 
     void OnEnable()
     {
         StartMinigameRun();
+    }
+
+    public void SetActivatingButton(MinigameActivateButton physicalButton)
+    {
+        currentActivatingButton = physicalButton;
     }
 
     List<int> createButtonSequence(int size)
@@ -165,6 +171,12 @@ public class ButtonsMiniGameManager : MonoBehaviour
         Debug.Log("Sequence matched! Mini-game completed.");
         isPlayerTurn = false;
         // Handle success state (e.g., unlock door, give ammo, close HUD panel)
+
+        // --- TRIGGER THE WORLD DOOR TO OPEN VIA STORED REFERENCE ---
+        if (currentActivatingButton != null)
+        {
+            currentActivatingButton.OpenDoors();
+        }
 
         // --- TURN ROGUELIKE CANVAS BACK ON ---
         if (roguelikeCanvasObject != null)
