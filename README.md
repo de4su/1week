@@ -23,7 +23,3 @@ This project was brought to life by a collaborative team of developers:
 *   **Engine:** Unity
 *   **Logic:** C#
 
-To run or edit this project locally:
-Clone the repository:
-```bash
-   git clone [https://github.com/de4su/1week.git](https://github.com/de4su/Stellar-Space.git)
